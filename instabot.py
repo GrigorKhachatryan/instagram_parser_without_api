@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import time
 import json
 import math
@@ -6,7 +7,7 @@ from selenium import webdriver
 
 url = 'https://www.instagram.com/'
 driver = webdriver.Chrome(executable_path=r"/Users/gg.khachatryan/Desktop/chromedriver")
-shortcode = []
+information = {'user':[]}
 
 
 # Функция, которая убирает html  теги
@@ -40,7 +41,17 @@ def all_user_data(url_page, count):
     driver.get(url_page)
     json_user = parser_html(driver.page_source)
     for i in range(count):
-        shortcode.append(json_user['data']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['shortcode'])
+        text = json_user['data']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges']
+        if len(text) == 0:
+            text = ''
+        else:
+            text = text[0]['node']['text']
+        photo_information = {
+            'short': json_user['data']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['shortcode'],
+            'text': text,
+            'photo': json_user['data']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['display_url'].replace('&amp;', '&')
+        }
+        information['user'].append(photo_information)
     next_page = json_user['data']['user']['edge_owner_to_timeline_media']['page_info']['end_cursor']
     return next_page
 
@@ -61,7 +72,11 @@ def instagram_parser(login_user):
         count_photo_page = 50 if count_all_photo > 50 else count_all_photo
 
     driver.quit()
-    return shortcode
+
+    with open('result.json','w') as file:
+        json.dump(information, file)
+
+    return information
 
 
 login_user_inst = input('Введите ваш ник в Instagram.  ')
