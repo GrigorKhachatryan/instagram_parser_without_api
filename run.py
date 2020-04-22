@@ -1,12 +1,12 @@
 import json
 import psycopg2
-import time
 import psycopg2.extras
 from Instagram_all import InstaParser
-from pprint import pprint
+from settings import PASSWORD
+
 
 connection = psycopg2.connect(user="postgres",
-                              password="йцу1024кен",
+                              password=PASSWORD,
                               host="localhost",
                               port="5434",
                               database="postgres")

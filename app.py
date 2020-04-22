@@ -3,8 +3,9 @@ import psycopg2
 import psycopg2.extras
 from pprint import pprint
 from Instagram_all import InstaParser
+from settings import PASSWORD
 connection = psycopg2.connect(user="postgres",
-                              password="йцу1024кен",
+                              password=PASSWORD,
                               host="localhost",
                               port="5434",
                               database="postgres")
