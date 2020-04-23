@@ -11,7 +11,7 @@ app = Flask(__name__)
 def index():
     nick = request.args.get('nick')
     if nick == None:
-        return render_template('index.html',a=[], name='введите никнейм')
+        return render_template('index.html',a=0, name='введите никнейм')
     responses = requests.get(f'https://instagram.com/{nick}/?__a=1').json()
     try:
         response = responses['graphql']['user']['id']

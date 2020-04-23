@@ -22,7 +22,7 @@
                 zoom: 7
             });
              // выведет 0, затем 1, затем 2
-
+            {%if a != 0%}
             placemark1 = new ymaps.Placemark([{{a['0']['lat']}}, {{a['0']['lon']}}],{
                 balloonContentHeader:'photo',
                 balloonContentBody:'<img src="{{a['0']['photo']}}" style="width: 300px; height: 180px; ">',
@@ -57,7 +57,7 @@
 
 
             myMap.geoObjects.add(placemark1).add(placemark2).add(placemark3).add(placemark4).add(placemark5);
-
+            {%endif%}
         }
         // Создает метку в центре Москвы
 
