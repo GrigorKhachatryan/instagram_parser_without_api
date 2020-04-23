@@ -37,7 +37,7 @@ def index():
                 result[str(k)]['name']='Непонятно'
             result[str(k)]['name'] = result[str(k)]['name'].split(' ')[0]
             k += 1
-            if k>4:
+            if k>2:
                 break
 
     return render_template('index.html', a=result, name = nick)

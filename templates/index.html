@@ -29,10 +29,10 @@
                 hintContent:'{{a['0']['name']}}',
 
             });
-            placemark2 = new ymaps.Placemark([{{a['4']['lat']}}, {{a['4']['lon']}}],{
+            placemark2 = new ymaps.Placemark([{{a['2']['lat']}}, {{a['2']['lon']}}],{
                 balloonContentHeader:'photo',
-                balloonContentBody:'<img src="{{a['4']['photo']}}" style="width: 300px; height: 180px; ">',
-                hintContent:'{{a['4']['name']}}',
+                balloonContentBody:'<img src="{{a['2']['photo']}}" style="width: 300px; height: 180px; ">',
+                hintContent:'{{a['2']['name']}}',
 
             });
             placemark3 = new ymaps.Placemark([{{a['1']['lat']}}, {{a['1']['lon']}}],{
@@ -40,23 +40,10 @@
                 balloonContentBody:'<img src="{{a['1']['photo']}}" style="width: 300px; height: 180px; ">',
                 hintContent:'{{a['1']['name']}}',
 
-            });
-            placemark4 = new ymaps.Placemark([{{a['2']['lat']}}, {{a['2']['lon']}}],{
-                balloonContentHeader:'photo',
-                balloonContentBody:'<img src="{{a['2']['photo']}}" style="width: 300px; height: 180px; ">',
-                hintContent:'{{a['2']['name']}}',
-
-            });
-            placemark5 = new ymaps.Placemark([{{a['3']['lat']}}, {{a['3']['lon']}}],{
-                balloonContentHeader:'photo',
-                balloonContentBody:'<img src="{{a['3']['photo']}}" style="width: 300px; height: 180px; ">',
-                hintContent:'{{a['3']['name']}}',
-
-            });
 
 
 
-            myMap.geoObjects.add(placemark1).add(placemark2).add(placemark3).add(placemark4).add(placemark5);
+            myMap.geoObjects.add(placemark1).add(placemark2).add(placemark3);
             {%endif%}
         }
         // Создает метку в центре Москвы
