@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>Быстрый старт. Размещение интерактивной карты на странице</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=ваш API-ключ&lang=ru_RU" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+        ymaps.ready(init);
+        function init(){
+            var placemark1;
+            var placemark2;
+            var placemark3;
+            var placemark4;
+            var placemark5;
+            var myMap = new ymaps.Map("map", {
+                center: [55.76, 37.64],
+                zoom: 7
+            });
+             // выведет 0, затем 1, затем 2
+
+            placemark1 = new ymaps.Placemark([{{a['0']['lat']}}, {{a['0']['lon']}}],{
+                balloonContentHeader:'photo',
+                balloonContentBody:'<img src="{{a['0']['photo']}}" style="width: 300px; height: 180px; ">',
+                hintContent:'{{a['0']['name']}}',
+
+            });
+            placemark2 = new ymaps.Placemark([{{a['4']['lat']}}, {{a['4']['lon']}}],{
+                balloonContentHeader:'photo',
+                balloonContentBody:'<img src="{{a['4']['photo']}}" style="width: 300px; height: 180px; ">',
+                hintContent:'{{a['4']['name']}}',
+
+            });
+            placemark3 = new ymaps.Placemark([{{a['1']['lat']}}, {{a['1']['lon']}}],{
+                balloonContentHeader:'photo',
+                balloonContentBody:'<img src="{{a['1']['photo']}}" style="width: 300px; height: 180px; ">',
+                hintContent:'{{a['1']['name']}}',
+
+            });
+            placemark4 = new ymaps.Placemark([{{a['2']['lat']}}, {{a['2']['lon']}}],{
+                balloonContentHeader:'photo',
+                balloonContentBody:'<img src="{{a['2']['photo']}}" style="width: 300px; height: 180px; ">',
+                hintContent:'{{a['2']['name']}}',
+
+            });
+            placemark5 = new ymaps.Placemark([{{a['3']['lat']}}, {{a['3']['lon']}}],{
+                balloonContentHeader:'photo',
+                balloonContentBody:'<img src="{{a['3']['photo']}}" style="width: 300px; height: 180px; ">',
+                hintContent:'{{a['3']['name']}}',
+
+            });
+
+
+
+            myMap.geoObjects.add(placemark1).add(placemark2).add(placemark3).add(placemark4).add(placemark5);
+
+        }
+        // Создает метку в центре Москвы
+
+    </script>
+</head>
+
+<body>
+<div class="row">
+
+
+    <div class="col-sm-8" style="margin:auto">
+    <form class="form-inline" method="get" action="/">
+
+  <div class="form-group mx-sm-5 mb-2">
+    <label for="inputPassword2" class="sr-only">Логин Instagram</label>
+    <input type="text" class="form-control" id="inputPassword2" placeholder="login" name="nick">
+  </div>
+  <button type="submit" class="btn btn-primary mb-2">Посмотреть</button>
+
+    </form>
+    </div>
+
+    <div class="col-sm-8" style="margin:auto">
+    <div id="map" style="width: 1000px; height: 500px; "></div>
+    </div>
+</div>
+</body>
+
+</html>
