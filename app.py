@@ -1,8 +1,6 @@
-import time
-import psycopg2
 import psycopg2.extras
 from pprint import pprint
-from Instagram_all import InstaParser
+from Parser.Instagram_all import InstaParser
 from settings import PASSWORD
 connection = psycopg2.connect(user="postgres",
                               password=PASSWORD,

@@ -1,7 +1,8 @@
+import aiohttp
+import asyncio
 import json
-import psycopg2
 import psycopg2.extras
-from Instagram_all import InstaParser
+import time
 from settings import PASSWORD
 
 
@@ -22,15 +23,49 @@ cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
 #     json.dump(json_out,file)
 with open('posts.json','r') as file:
     a = json.load(file)
-start = 30548
-t = 30548
-for i in a['posts'][start:]:
-    a = InstaParser()
-    location = a.pars_code(i)['graphql']['shortcode_media']['location']
-    if location is None:
-        cursor.execute('delete from publication where code=%s',(i[0],))
-        connection.commit()
-    print(i,t)
-    t += 1
+start = 33816
+
+t = 34578
 
 
+print(a['posts'][0])
+
+loop = asyncio.get_event_loop()
+
+
+async def main(ids):
+    async with aiohttp.ClientSession() as session:
+        for i in ids:
+            print(None)
+            response = await session.get(f'https://www.instagram.com/p/{i}/?__a=1',ssl=False)
+            try:
+                json = await response.json()
+
+                if json['graphql']['shortcode_media']['location'] is  None:
+                    print(i)
+                    cursor.execute('delete from publication where code=%s', (i,))
+                    connection.commit()
+            except:
+                print(i)
+                cursor.execute('delete from publication where code=%s', (i,))
+                connection.commit()
+
+
+
+
+
+async def start():
+    chunk = len(a['posts']) // 15
+    start, stop = 0, chunk
+
+    futures = []
+    while stop <= len(a['posts']):
+        futures.append(loop.create_task(main(a['posts'][start:stop])))
+        start += chunk
+        stop += chunk
+
+
+    await asyncio.gather(*futures)
+starts = time.time()
+loop.run_until_complete(start())
+print(time.time()-starts)

@@ -50,7 +50,7 @@ class InstaParser():
                     self.information.append(photo_information)
         except:
             print('Я сплю')
-            time.sleep(90)
+            time.sleep(150)
             return self.all_user_data(url_page=url_page)
         next_page = json_user['page_info']['end_cursor']
         if next_page is not None:
@@ -80,7 +80,7 @@ class InstaParser():
             return False
 
         t = requests.get(self.url + username + '?__a=1', headers=header).text
-        print(t)
+        return username
 
     def pars_code(self, code):
         response = requests.get(self.url + 'p/' + code + '/?__a=1', headers=self.const_gis()).text
