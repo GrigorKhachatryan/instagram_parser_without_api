@@ -1,0 +1,4 @@
+language: python
+rvm:
+ - pip3 install -r requirements.txt
+ - make test
