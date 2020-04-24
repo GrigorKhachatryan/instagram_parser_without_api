@@ -1,2 +1,2 @@
 # instagram_parser_without_api
-https://travis-ci.com/GrigorKhachatryan/instagram_parser_without_api
+https://travis-ci.org/GrigorKhachatryan/instagram_parser_without_api.svg?branch=master
