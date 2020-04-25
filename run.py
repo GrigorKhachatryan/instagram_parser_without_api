@@ -23,49 +23,54 @@ cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
 #     json.dump(json_out,file)
 with open('posts.json','r') as file:
     a = json.load(file)
-start = 33816
 
-t = 34578
-
-
-print(a['posts'][0])
-
-loop = asyncio.get_event_loop()
+nest = a['posts'][:1050000]
 
 
 async def main(ids):
     async with aiohttp.ClientSession() as session:
         for i in ids:
-            print(None)
-            response = await session.get(f'https://www.instagram.com/p/{i}/?__a=1',ssl=False)
+
+
             try:
+                response = await session.get(f'https://www.instagram.com/p/{i}/?__a=1', ssl=False)
                 json = await response.json()
 
                 if json['graphql']['shortcode_media']['location'] is  None:
-                    print(i)
-                    cursor.execute('delete from publication where code=%s', (i,))
-                    connection.commit()
+
+                    short_list.append((str(i),))
+
             except:
-                print(i)
-                cursor.execute('delete from publication where code=%s', (i,))
-                connection.commit()
+                short_list.append((str(i),))
+
 
 
 
 
 
 async def start():
-    chunk = len(a['posts']) // 15
+    chunk = len(k) // 30
     start, stop = 0, chunk
 
     futures = []
-    while stop <= len(a['posts']):
-        futures.append(loop.create_task(main(a['posts'][start:stop])))
+    while stop <= len(k):
+        futures.append(loop.create_task(main(k[start:stop])))
         start += chunk
         stop += chunk
 
-
     await asyncio.gather(*futures)
-starts = time.time()
-loop.run_until_complete(start())
-print(time.time()-starts)
+print(len(a['posts']))
+for i in range(2700000,len(a['posts']),30000):
+
+    short_list = []
+    k = a['posts'][i:i+30000]
+    print(i,i+30000)
+    loop = asyncio.get_event_loop()
+    starts = time.time()
+    loop.run_until_complete(start())
+    print(time.time() - starts)
+
+    cursor.executemany('delete from publication where code=%s', short_list)
+    connection.commit()
+    cursor.execute('select count(*) from publication')
+    print(cursor.fetchone())
