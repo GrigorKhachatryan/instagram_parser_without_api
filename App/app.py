@@ -1,7 +1,11 @@
+import sys
+sys.path.append("..")
+import time
 import psycopg2.extras
 from pprint import pprint
+from App.settings import PASSWORD
 from Parser.Instagram_all import InstaParser
-from settings import PASSWORD
+
 connection = psycopg2.connect(user="postgres",
                               password=PASSWORD,
                               host="localhost",
@@ -13,11 +17,13 @@ cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
 number = int(input('С какого id начать:  '))
 
 for instagram_id in range(number, number+100000):
+
     a = InstaParser(user_id=instagram_id)
     t = a.instagram_parser()
     if t == []:
         print('Аккаунт - ' + str(instagram_id) + ' пустой или закрытый')
         continue
+
     cursor.execute('insert into Client (id) values (%s)', (instagram_id,))
     connection.commit()
     short_code = []

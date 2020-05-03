@@ -1,8 +1,10 @@
 import aiohttp
 import asyncio
-import json
 import psycopg2.extras
+from psycopg2.extras import Json
 import time
+import json
+import hashlib
 from settings import PASSWORD
 
 
@@ -13,39 +15,30 @@ connection = psycopg2.connect(user="postgres",
                               database="postgres")
 cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-# cursor.execute('select code from publication')
-# publication = cursor.fetchall()
-# json_out = {'posts':[]}
-# for i in publication:
-#     json_out['posts'].append(i[0])
-#
-# with open('posts.json','w') as file:
-#     json.dump(json_out,file)
-with open('posts.json','r') as file:
-    a = json.load(file)
 
-nest = a['posts'][:1050000]
 
 
 async def main(ids):
     async with aiohttp.ClientSession() as session:
         for i in ids:
-
-
-            try:
-                response = await session.get(f'https://www.instagram.com/p/{i}/?__a=1', ssl=False)
-                json = await response.json()
-
-                if json['graphql']['shortcode_media']['location'] is  None:
-
+            response = await session.get(f'https://www.instagram.com/p/{i}/?__a=1', ssl=False)
+            if response.status != 200:
+                if response.status == 404:
                     short_list.append((str(i),))
+                continue
+            try:
+                json_res = await response.json()
+            except BaseException as err:
+                print(err)
+            try:
+                if json_res['graphql']['shortcode_media']['location'] is None:
+                    short_list.append((str(i),))
+                    continue
 
-            except:
+                text_list.append((json_res['graphql']['shortcode_media']["edge_media_to_caption"]["edges"][0]["node"]["text"], Json(json_res['graphql']['shortcode_media']['location']), str(i)))
+            except IndexError as err:
+                print(err, json_res['graphql']['shortcode_media']["edge_media_to_caption"]["edges"])
                 short_list.append((str(i),))
-
-
-
-
 
 
 async def start():
@@ -59,18 +52,33 @@ async def start():
         stop += chunk
 
     await asyncio.gather(*futures)
-print(len(a['posts']))
-for i in range(2700000,len(a['posts']),30000):
 
+
+while True:
+
+    cursor.execute('select code from publication where locations is null')
+    publication = cursor.fetchall()
+    a = {'posts': []}
+    for i in publication:
+        a['posts'].append(i[0])
+    print(len(a['posts']))
     short_list = []
-    k = a['posts'][i:i+30000]
-    print(i,i+30000)
+    text_list = []
+    k = a['posts'][0:300]
     loop = asyncio.get_event_loop()
     starts = time.time()
-    loop.run_until_complete(start())
+    try:
+        loop.run_until_complete(start())
+    except BaseException as err:
+        print(err)
     print(time.time() - starts)
 
     cursor.executemany('delete from publication where code=%s', short_list)
     connection.commit()
-    cursor.execute('select count(*) from publication')
-    print(cursor.fetchone())
+
+    cursor.executemany('update publication set posts=%s, locations=%s where code=%s',text_list)
+    connection.commit()
+
+    print(f'Удалено {len(short_list)} постов.')
+    print(f'Текст добавлен у {len(text_list)} постов.')
+
