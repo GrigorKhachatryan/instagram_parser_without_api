@@ -64,7 +64,7 @@ while True:
     print(len(a['posts']))
     short_list = []
     text_list = []
-    k = a['posts'][0:300]
+    k = a['posts'][0:3000]
     loop = asyncio.get_event_loop()
     starts = time.time()
     try:
