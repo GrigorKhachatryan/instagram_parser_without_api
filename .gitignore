@@ -109,6 +109,7 @@ venv.bak/
 
 .DS_Store
 App/settings.py
-Tridavisor/settings.py
-Tridavisor/train_en.csv
-Tridavisor/test_en.csv
+Tripadvisor/settings.py
+Analysis/Sentiment analysis/data/train_en.csv
+Analysis/Sentiment analysis/data/test_en.csv
+Analysis/Sentiment analysis/settings.py
