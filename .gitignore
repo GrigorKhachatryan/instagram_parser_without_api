@@ -108,8 +108,8 @@ venv.bak/
 .idea/
 
 .DS_Store
-App/settings.py
-Tripadvisor/settings.py
-Analysis/Sentiment analysis/data/train_en.csv
-Analysis/Sentiment analysis/data/test_en.csv
-Analysis/Sentiment analysis/settings.py
+app/settings.py
+tripadvisor/settings.py
+analysis/sentiment_analysis/data/train_en.csv
+analysis/sentiment_analysis/data/test_en.csv
+analysis/sentiment_analysis/settings.py

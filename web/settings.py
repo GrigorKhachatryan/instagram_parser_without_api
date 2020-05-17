@@ -1,0 +1,1 @@
+API_KEY = 'trnsl.1.1.20200508T225525Z.750aaf8ffb61d85c.fed754ebf01fdccc521c7c30c01cf455d4c51bf6'

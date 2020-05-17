@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from Parser.Instagram_all import InstaParser
+from parsering.instagram_all import InstaParser
 
 
 class UtilsTestCase(TestCase):
