@@ -113,3 +113,4 @@ tripadvisor/settings.py
 analysis/sentiment_analysis/data/train_en.csv
 analysis/sentiment_analysis/data/test_en.csv
 analysis/sentiment_analysis/settings.py
+web/settings.py
