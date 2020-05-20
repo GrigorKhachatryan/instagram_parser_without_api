@@ -73,9 +73,9 @@ selenium==3.141.0
 six==1.14.0
 sklearn==0.0
 soupsieve==2.0
-tensorboard==2.1.1
-tensorflow==2.1.0
-tensorflow-estimator==2.1.0
+tensorboard==2.0.0
+tensorflow==2.0.0
+tensorflow-estimator==2.0.0
 termcolor==1.1.0
 termstyle==0.1.11
 toml==0.10.0
