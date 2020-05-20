@@ -76,6 +76,9 @@ class Information():
                 json_res = response.json()
             except BaseException as err:
                 print(22222222,err)
+            except:
+                time.sleep(0.1)
+                continue
             try:
                 location = json_res['graphql']['shortcode_media']['location']
                 post_text = str(json_res['graphql']['shortcode_media']["edge_media_to_caption"]["edges"][0]["node"]["text"])
