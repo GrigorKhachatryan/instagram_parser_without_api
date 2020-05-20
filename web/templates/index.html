@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/x-icon">
+  <title>Подбор стран отдыха</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="../static/css/one-page-wonder.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Start Bootstrap</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Sign Up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Log In</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="masthead text-center text-white">
+    <div class="masthead-content">
+      <div class="container">
+        <br>
+        <h2 class="masthead-subheading mb-0">Хотите подборать страну для отдыха?</h2>
+        <h3 class="masthead-subheading mb-0">Введите Ваш логин в Instagram </h3>
+            <form action="/api/v1/user" method="get" id="my_form">
+    <div>
+    <input type="text" name="instagram" id="name" required="" style=" background-color: transparent; border: none; border-bottom: 1px solid #fff;outline: none; color: white; font-size:25px;text-align:center;"><br>
+    </div>
+      <button type="submit" name="submit" value="Submit Form" class="btn btn-primary btn-xl rounded-pill mt-5"> Подобрать </button>
+
+</form>
+      </div>
+    </div>
+
+<h3 id="dim"></h3>
+    <div class="bg-circle-1 bg-circle"></div>
+    <div class="bg-circle-2 bg-circle"></div>
+    <div class="bg-circle-3 bg-circle"></div>
+    <div class="bg-circle-4 bg-circle"></div>
+    <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  </header>
+
+
+
+  <section id="section1">
+  </section>
+  <section id="section2">
+  </section>
+  <section id="section3">
+  </section>
+
+
+
+  <!-- Footer -->
+  <footer class="py-5 bg-black">
+    <div class="container">
+      <p class="m-0 text-center text-white small">Copyright &copy; Khachatryan Grigor 2020</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="../static/vendor/jquery/jquery.min.js"></script>
+  <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+<script>
+
+
+ $('document').ready(function () {
+     $("#my_form").submit(function (event) {
+          var dim = document.getElementById("dim");
+          dim.textContent = 'please wait...';
+         event.preventDefault(); //prevent default action
+         // var post_url = $(this).attr("action") + '?' + ; //get form action url
+         var request_method = $(this).attr("method"); //get form GET/POST method
+         var form_data = $(this).serialize(); //Encode form elements for submission
+         var post_url = $(this).attr("action") + '?' + form_data; //get form action url
+
+
+
+
+
+         $.ajax({
+             url: post_url,
+             type: request_method,
+             success: function (response) {
+                 console.log(post_url);
+                 // Perform operation on the return value
+                 var dim = document.getElementById("dim");
+
+                 dim.textContent ='Данные получены';
+
+                     var div11 = document.createElement("div");
+               div11.className='container';
+               var div12 = document.createElement("div");
+               div12.className='container';
+               var div13 = document.createElement("div");
+               div13.className='container';
+
+               var div21 = document.createElement("div");
+               div21.className='row align-items-center';
+               var div22 = document.createElement("div");
+               div22.className='row align-items-center';
+               var div23 = document.createElement("div");
+               div23.className='row align-items-center';
+
+               var div31 = document.createElement("div");
+               div31.className='col-lg-6 order-lg-2';
+               var div32 = document.createElement("div");
+               div32.className='col-lg-6';
+               var div33 = document.createElement("div");
+               div33.className='col-lg-6 order-lg-2';
+
+               var div41 = document.createElement("div");
+               div41.className='p-5';
+               var div42 = document.createElement("div");
+               div42.className='p-5';
+               var div43 = document.createElement("div");
+               div43.className='p-5';
+
+               var div51 = document.createElement("div");
+               div51.className='col-lg-6 order-lg-1';
+               var div52 = document.createElement("div");
+               div52.className='col-lg-6';
+               var div53 = document.createElement("div");
+               div53.className='col-lg-6 order-lg-1';
+
+               var div61 = document.createElement("div");
+               div61.className='p-5';
+               var div62 = document.createElement("div");
+               div62.className='p-5';
+               var div63 = document.createElement("div");
+               div63.className='p-5';
+
+               var img1 = document.createElement("img");
+               img1.className = 'img-fluid rounded-circle';
+
+               var img2 = document.createElement("img");
+               img2.className = 'img-fluid rounded-circle';
+
+               var img3 = document.createElement("img");
+               img3.className = 'img-fluid rounded-circle';
+
+
+               var hear1 = document.createElement('h2');
+               hear1.className = 'display-4';
+               var hear2 = document.createElement('h2');
+               hear2.className = 'display-4';
+               var hear3 = document.createElement('h2');
+               hear3.className = 'display-4';
+
+               var tag1 = document.createElement('p');
+               var tag2 = document.createElement('p');
+               var tag3 = document.createElement('p');
+
+               var section1 = document.getElementById("section1");
+               var child = section1.lastElementChild;
+        while (child) {
+            section1.removeChild(child);
+            child = section1.lastElementChild;
+        }
+
+
+               section1.appendChild(div11);
+               div11.appendChild(div21);
+               div21.appendChild(div31);
+               div31.appendChild(div41);
+               div41.appendChild(img1);
+               div21.appendChild(div51);
+               div51.appendChild(div61);
+               div61.appendChild(hear1);
+               div61.appendChild(tag1);
+
+                var section2 = document.getElementById("section2");
+  var child2 = section2.lastElementChild;
+        while (child2) {
+            section2.removeChild(child2);
+            child2 = section2.lastElementChild;
+        }
+
+               section2.appendChild(div12);
+               div12.appendChild(div22);
+               div22.appendChild(div32);
+               div32.appendChild(div42);
+               div42.appendChild(img2);
+               div22.appendChild(div52);
+               div52.appendChild(div62);
+               div62.appendChild(hear2);
+               div62.appendChild(tag2);
+
+               var section3 = document.getElementById("section3");
+  var child3 = section3.lastElementChild;
+        while (child3) {
+            section3.removeChild(child3);
+            child3 = section3.lastElementChild;
+        }
+
+               section3.appendChild(div13);
+               div13.appendChild(div23);
+               div23.appendChild(div33);
+               div33.appendChild(div43);
+               div43.appendChild(img3);
+               div23.appendChild(div53);
+               div53.appendChild(div63);
+               div63.appendChild(hear3);
+               div63.appendChild(tag3);
+
+
+ hear1.textContent = response['result'][0][0];
+    hear2.textContent = response['result'][1][0];
+hear3.textContent = response['result'][2][0];
+     img1.src = response['result'][0][1];
+               img2.src = response['result'][1][1];
+img3.src = response['result'][2][1];
+tag1.textContent= 'Здесь отдыхают новички и любители, тренируются профессионалы. Прекрасные условия для отдыха и развитая инфраструктура с каждым годом привлекают все больше и больше туристов. Чистота здешних озер и красота природы поразят самых искушенных путешественников.'
+tag2.textContent= 'Эта страна довольно самобытная и контрастная. Пышные тропические леса соседствуют здесь с величественными горами, дикие джунгли - с роскошными пляжами, огромные реки - с пустынными плато, а ревущие водопады - с тихими и уютными океанскими бухтами.'
+tag3.textContent= 'Это страна, в которой мечтают провести свой отдых миллионы жителей нашей планеты. Для кого-то эта мечта воплощается в реальность, кому-то везет меньше, но факт остается фактом!'
+
+             },
+           error: function(response){
+               dim.textContent ='Аккаунт закрыт или его не существует';
+           }
+
+
+         })
+     });
+ });
+
+
+
+</script>
+</html>

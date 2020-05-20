@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+</head>
+<body style="background: url(https://img1.goodfon.ru/wallpaper/nbig/f/bd/pesok-volnami-melkiy-priroda.jpg)">
+
+<h1>Подбор курортных стран</h1>
+
+
+
+<form action="/api/v1/user" method="get" id="my_form">
+    <label for="name">login</label><br>
+    <input type="text" name="instagram" id="name">
+    <button type="submit" name="submit" value="Submit Form"> Отправить </button>
+
+</form>
+<h3 id="dim"></h3>
+
+
+<div id="myDynamicTable" style="margin-left: auto; margin-right: auto"></div>
+<div id="wait" style="display:none;width:69px;height:89px;border:1px solid black;position:absolute;top:50%;left:50%;padding:2px;"><img src='demo_wait.gif' width="64" height="64" /><br>Loading..</div>
+</body>
+<script>
+
+
+ $('document').ready(function () {
+     $("#my_form").submit(function (event) {
+          var dim = document.getElementById("dim");
+          dim.textContent = 'please wait...'
+         event.preventDefault(); //prevent default action
+         // var post_url = $(this).attr("action") + '?' + ; //get form action url
+         var request_method = $(this).attr("method"); //get form GET/POST method
+         var form_data = $(this).serialize(); //Encode form elements for submission
+         var post_url = $(this).attr("action") + '?' + form_data; //get form action url
+
+
+         $.ajax({
+             url: post_url,
+             type: request_method,
+             success: function (response) {
+                 console.log(post_url);
+                 // Perform operation on the return value
+                 var dim = document.getElementById("dim");
+
+                 dim.textContent = response['result']
+
+
+             }
+
+
+         })
+     });
+ });
+
+
+
+</script>
+</html>

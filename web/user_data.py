@@ -75,7 +75,7 @@ class Information():
             try:
                 json_res = response.json()
             except BaseException as err:
-                print(err)
+                print(22222222,err)
             try:
                 location = json_res['graphql']['shortcode_media']['location']
                 post_text = str(json_res['graphql']['shortcode_media']["edge_media_to_caption"]["edges"][0]["node"]["text"])
@@ -169,15 +169,5 @@ class Information():
         return result_country
 
 
-start = time.time()
-country = []
-a = Information(nickname='annushkaa.p')
-country_code = a.similar_users()
-with open('../analysis/clastering/country_code.json','r') as file:
-    code = json.load(file)
-for i in country_code:
-    country.append(code['code'][i])
-print(country)
-print(time.time()-start)
 
 
