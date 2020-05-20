@@ -77,6 +77,7 @@ class Information():
             except BaseException as err:
                 print(22222222,err)
             except:
+                print(response)
                 time.sleep(0.1)
                 continue
             try:
@@ -100,6 +101,8 @@ class Information():
                 self.love_list['result'][json.loads(location['address_json'])["country_code"]]['point'] += self.post_point(post_text)+1
                 self.love_list['result'][json.loads(location['address_json'])["country_code"]]['count'] += 1
             except IndexError as err:
+                print(err)
+            except UnboundLocalError as err:
                 print(err)
         return self.love_list
 
