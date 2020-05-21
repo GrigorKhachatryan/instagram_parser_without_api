@@ -7,6 +7,8 @@ import pickle
 import time
 import numpy as np
 import pandas as pd
+import asyncio
+import aiohttp
 from pprint import pprint
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from parsering.instagram_all import InstaParser
@@ -28,6 +30,7 @@ class Information():
         self.love_list = {'result':{}}
         self.model_lstm = Model().lstm()
         self.model_lstm.load_weights('../analysis/sentiment_analysis/best_model_lstm.h5')
+        self.loop = asyncio.get_event_loop()
 
         with open('../analysis/sentiment_analysis/tokenizer.pickle', 'rb') as handle:
             self.tokenizer = pickle.load(handle)
@@ -56,55 +59,83 @@ class Information():
 
     def short_code(self):
         obj = InstaParser(user_id=self.login_to_id())
-        short_list = obj.instagram_parser()
+        short_list = obj.instagram_parser()[:200]
+        print(len(short_list))
         return short_list
 
-    def translate_text(self, text, dest_language="en"):
-        translate_url = f'https://translate.yandex.net/api/v1.5/tr.json/translate?key={API_KEY}'
-        param = {'text': text, 'lang': dest_language, 'format': 'plain'}
-        header = {'Content-Type': 'application/x-www-form-urlencoded'}
-        response = requests.post(translate_url, params=param, headers=header).json()
-        return response['text'][0]
-
-    def posts_info(self):
-        posts = self.short_code()[:300]
-        for post in posts:
-            response = requests.get(f'https://www.instagram.com/p/{post}/?__a=1')
-            if response.status_code != 200:
-                continue
+    async def translate_text(self, text, dest_language="en"):
+        async with aiohttp.ClientSession() as session:
+            translate_url = f'https://translate.yandex.net/api/v1.5/tr.json/translate?key={API_KEY}'
+            param = {'text': text, 'lang': dest_language, 'format': 'plain'}
+            header = {'Content-Type': 'application/x-www-form-urlencoded'}
+            response = await session.post(translate_url, params=param, headers=header, ssl=False)
             try:
-                json_res = response.json()
-            except BaseException as err:
-                print(22222222,err)
+                response = await response.json()
             except:
-                print(response)
-                time.sleep(0.1)
-                continue
-            try:
-                location = json_res['graphql']['shortcode_media']['location']
-                post_text = str(json_res['graphql']['shortcode_media']["edge_media_to_caption"]["edges"][0]["node"]["text"])
+                return ''
+            return response['text'][0]
 
-                if location is None:
-                    continue
-                if location['address_json'] is None:
-                    continue
-                if json.loads(location['address_json'])["country_code"] == '':
-                    continue
-
-                post_text = self.emoji_pattern.sub('', post_text)[:200]
-                if len(post_text) < 5:
-                    continue
-                post_text = self.translate_text(post_text)
-
-                if json.loads(location['address_json'])["country_code"] not in self.love_list['result']:
-                    self.love_list['result'][json.loads(location['address_json'])["country_code"]] = {'point':0,'count':0}
-                self.love_list['result'][json.loads(location['address_json'])["country_code"]]['point'] += self.post_point(post_text)+1
-                self.love_list['result'][json.loads(location['address_json'])["country_code"]]['count'] += 1
-            except IndexError as err:
-                print(err)
-            except UnboundLocalError as err:
-                print(err)
+    def get_ticks(self):
+        start = time.time()
+        self.loop.run_until_complete(self.main())
+        print(time.time()-start)
         return self.love_list
+
+    async def posts_info(self, posts):
+        print(posts)
+        async with aiohttp.ClientSession() as session:
+            for post in posts:
+                response = await session.get(f'https://www.instagram.com/p/{post}/?__a=1', ssl=False)
+                if response.status != 200:
+                    continue
+                try:
+                    json_re = await response.read()
+                    json_res = json.loads(json_re)
+                    print(json_res['graphql']['shortcode_media']['location'])
+                except BaseException as err:
+                    print(1,err)
+                except:
+                    print(response)
+                    continue
+                try:
+                    location = json_res['graphql']['shortcode_media']['location']
+                    post_text = str(json_res['graphql']['shortcode_media']["edge_media_to_caption"]["edges"][0]["node"]["text"])
+
+                    if location is None:
+                        continue
+                    if location['address_json'] is None:
+                        continue
+                    if json.loads(location['address_json'])["country_code"] == '':
+                        continue
+
+                    post_text = self.emoji_pattern.sub('', post_text)[:200]
+                    if len(post_text) < 5:
+                        continue
+                    post_text = await self.translate_text(post_text)
+                    if post_text == '':
+                        continue
+                    if json.loads(location['address_json'])["country_code"] not in self.love_list['result']:
+                        self.love_list['result'][json.loads(location['address_json'])["country_code"]] = {'point':0,'count':0}
+                    self.love_list['result'][json.loads(location['address_json'])["country_code"]]['point'] += self.post_point(post_text)+1
+                    self.love_list['result'][json.loads(location['address_json'])["country_code"]]['count'] += 1
+                except IndexError as err:
+                    print(2,err)
+                except UnboundLocalError as err:
+                    print(3,err)
+        return self.love_list
+
+    async def main(self):
+        k = self.short_code()
+        chunk = len(k) // 30
+        start, stop = 0, chunk
+
+        futures = []
+        while stop <= len(k):
+            futures.append(self.loop.create_task(self.posts_info(k[start:stop])))
+            start += chunk
+            stop += chunk
+
+        await asyncio.gather(*futures)
 
     def post_point(self, text):
 
@@ -126,7 +157,7 @@ class Information():
 
     def clastering(self):
 
-        country_points = self.posts_info()
+        country_points = self.get_ticks()
 
         country_list = pd.read_csv('../analysis/clastering/roo.scv')
         centroid = pd.read_csv(
@@ -173,7 +204,6 @@ class Information():
                 break
 
         return result_country
-
 
 
 
