@@ -13,7 +13,5 @@ cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
 def insta_tasks(login):
     # obj = Information(nickname=login)
     # country_code = obj.similar_users()
-    cursor.execute('update resorts set country1=%s, country2=%s, country3=%s where login=%s',
-                   ('aa', 'vv', 'cc', login))
-    connection.commit()
-    return 'ok'
+    country_code = ['aa','vv','cc']
+    return country_code
