@@ -76,6 +76,9 @@ class Information():
             if response.status_code != 200:
                 continue
             try:
+                print(response)
+                print(response.text)
+                print(response.json())
                 json_res = response.text
                 json_res = json.loads(json_res)
             except BaseException as err:
