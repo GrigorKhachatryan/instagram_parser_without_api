@@ -30,7 +30,7 @@ def info():
         connection.commit()
     a = q.enqueue(insta_tasks, login)
 
-    return jsonify({'result': a.key})
+    return a.key
 
 @app.route("/get_word_count_result/<job_key>", methods=['GET'])
 def get_word_count_result(job_key):
