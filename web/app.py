@@ -28,7 +28,14 @@ def info():
         connection.commit()
     redis_conn = redis.from_url(os.environ.get("REDIS_URL"))
     queue = Queue(connection=redis_conn)
-    queue.enqueue(insta_tasks, login)
+    a = queue.enqueue(insta_tasks, login)
+    print(a.result)
+    time.sleep(10)
+    print(a.result)
+    time.sleep(10)
+    print(a.result)
+    time.sleep(10)
+    print(a.result)
     return 'ok'
 
 

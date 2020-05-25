@@ -16,4 +16,4 @@ def insta_tasks(login):
     cursor.execute('update resorts set country1=%s, country2=%s, country3=%s where login=%s',
                    (country_code[0], country_code[1], country_code[2], login))
     connection.commit()
-    return 'ok'
+    return country_code
