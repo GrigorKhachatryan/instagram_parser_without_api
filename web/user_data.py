@@ -76,7 +76,7 @@ class Information():
             if response.status_code != 200:
                 continue
             try:
-                print(response)
+                print(response.content)
                 json_res = response.text
                 dataform = str(json_res).strip("'<>() ").replace('\'', '\"')
                 json_res = json.loads(dataform)
