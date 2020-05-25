@@ -29,14 +29,18 @@ def info():
         cursor.execute('insert into resorts(login) values(%s)', (login,))
         connection.commit()
     a = q.enqueue(insta_tasks, login)
-    print(dir(a), a.result, a.return_value)
-    time.sleep(10)
-    print(dir(a), a.result, a.return_value)
-    time.sleep(10)
-    print(dir(a), a.result, a.return_value)
 
-    return jsonify({'result': a.return_value})
+    return jsonify({'result': a.key})
 
+@app.route("/get_word_count_result/<job_key>", methods=['GET'])
+def get_word_count_result(job_key):
+    job_key = job_key.replace("rq:job:", "")
+    job = Job.fetch(job_key, connection=conn)
+
+    if(not job.is_finished):
+        return "Not yet", 202
+    else:
+        return str(job.result), 200
 
 @app.route("/api/v1/user", methods=['GET'])
 def user_api():
