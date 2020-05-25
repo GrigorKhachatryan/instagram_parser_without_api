@@ -76,10 +76,12 @@ class Information():
             if response.status_code != 200:
                 continue
             try:
-                json_res = response.json()
+                json_res = response.text
+                json_res = json.loads(json_res)
             except BaseException as err:
                 print(22222222,err)
             except:
+                print(1)
                 continue
             try:
                 location = json_res['graphql']['shortcode_media']['location']
