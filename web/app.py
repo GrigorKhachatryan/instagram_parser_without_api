@@ -1,31 +1,46 @@
 import time
 import json
 from flask import Flask, render_template,request, jsonify
-from user_data import Information
+import os
+import redis
 import psycopg2.extras
-from settings import PASSWORD
+from rq import Queue
+from tasks import insta_tasks
+from settings import PASSWORD, DATABASE, USER
 
-connection = psycopg2.connect(user="lybtbdynxmmspu",
+connection = psycopg2.connect(user=USER,
                               password=PASSWORD,
-                              host="ec2-35-169-254-43.compute-1.amazonaws.com",
+                              host="ec2-52-72-65-76.compute-1.amazonaws.com",
                               port="5432",
-                              database="d34stkoqrtmabb")
+                              database=DATABASE)
 cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 app = Flask(__name__)
 
 
-@app.route("/", methods=['GET'])
+@app.route("/api/v1/task", methods=['GET'])
 def info():
-    return render_template('index.html')
+    login = request.args.get('instagram')
+    cursor.execute('select * from resorts where login=%s', (login,))
+    user = cursor.fetchone()
+    if user == None:
+        cursor.execute('insert into resorts(login) values(%s), (login,)')
+        connection.commit()
+    redis_conn = redis.from_url(os.environ.get("REDIS_URL"))
+    queue = Queue(connection=redis_conn)
+    queue.enqueue(insta_tasks, login)
+    return 'ok'
 
 
 @app.route("/api/v1/user", methods=['GET'])
 def user_api():
     login = request.args.get('instagram')
-    country=[]
-    obj = Information(nickname=login)
-    country_code = obj.similar_users()
+    country = []
+    cursor.execute('select * from resorts where login=%s', (login,))
+    user_country = cursor.fetchone()
+    if user_country['country1'] is None:
+        return jsonify({'result': []})
+    country_code = [user_country['country1'], user_country['country2'], user_country['country3']]
     with open('../analysis/clastering/country_code.json', 'r') as file:
         code = json.load(file)
     for i in country_code:
@@ -36,4 +51,4 @@ def user_api():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
