@@ -77,7 +77,9 @@ class Information():
                 continue
             try:
                 print(response)
-                json_res = response.json()
+                json_res = response.text
+                dataform = str(json_res).strip("'<>() ").replace('\'', '\"')
+                json_res = json.loads(dataform)
             except BaseException as err:
                 print(22222222,err)
             except:
