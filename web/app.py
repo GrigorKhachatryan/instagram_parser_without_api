@@ -5,8 +5,10 @@ import os
 import redis
 import psycopg2.extras
 from rq import Queue
+from rq.job import Job
 from tasks import insta_tasks
 from settings import PASSWORD, DATABASE, USER
+from worker import conn
 
 connection = psycopg2.connect(user=USER,
                               password=PASSWORD,
@@ -14,7 +16,7 @@ connection = psycopg2.connect(user=USER,
                               port="5432",
                               database=DATABASE)
 cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
+q = Queue(connection=conn)
 app = Flask(__name__)
 
 
@@ -26,14 +28,12 @@ def info():
     if user == None:
         cursor.execute('insert into resorts(login) values(%s)', (login,))
         connection.commit()
-    redis_conn = redis.from_url(os.environ.get("REDIS_URL"))
-    queue = Queue(connection=redis_conn)
-    a = queue.enqueue(insta_tasks, login)
-    print(dir(a),a.result,a.return_value)
+    a = q.enqueue(insta_tasks, login)
+    print(dir(a), a.result, a.return_value)
     time.sleep(10)
-    print(dir(a),a.result,a.return_value)
+    print(dir(a), a.result, a.return_value)
     time.sleep(10)
-    print(dir(a),a.result,a.return_value)
+    print(dir(a), a.result, a.return_value)
 
     return jsonify({'result': a.return_value})
 

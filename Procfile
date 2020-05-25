@@ -1,2 +1,2 @@
-worker: python -u --chdir web app.py
+worker: python /web/worker.py
 web: gunicorn --chdir web app:app
