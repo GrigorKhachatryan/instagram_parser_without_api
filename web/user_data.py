@@ -77,9 +77,7 @@ class Information():
                 continue
             try:
                 print(response)
-                print(response.json())
-                json_res = response.text
-                json_res = json.loads(json_res)
+                json_res = response.json()
             except BaseException as err:
                 print(22222222,err)
             except:
