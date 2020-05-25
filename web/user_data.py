@@ -23,6 +23,7 @@ from scipy.spatial.distance import euclidean
 #
 #
 print(os.getcwd())
+print(os.listdir(os.getcwd()))
 class Information():
 
     def __init__(self, nickname='khachatryan_jr'):
