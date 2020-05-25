@@ -29,13 +29,13 @@ def info():
     redis_conn = redis.from_url(os.environ.get("REDIS_URL"))
     queue = Queue(connection=redis_conn)
     a = queue.enqueue(insta_tasks, login)
-    print(dir(a),a.result)
+    print(dir(a),a.result,a.return_value)
     time.sleep(10)
-    print(dir(a),a.result)
+    print(dir(a),a.result,a.return_value)
     time.sleep(10)
-    print(dir(a),a.result)
+    print(dir(a),a.result,a.return_value)
 
-    return jsonify({'result': a.result})
+    return jsonify({'result': a.return_value})
 
 
 @app.route("/api/v1/user", methods=['GET'])
