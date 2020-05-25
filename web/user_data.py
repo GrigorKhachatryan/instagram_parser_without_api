@@ -72,12 +72,11 @@ class Information():
     def posts_info(self):
         posts = self.short_code()[:300]
         for post in posts:
-            response = requests.get(f'https://www.instagram.com/p/{post}/?__a=1')
+            response = requests.get(f'https://www.instagram.com/p/{post}/?__a=1',headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:64.0) Gecko/20100101 Firefox/64.0'})
             if response.status_code != 200:
                 continue
             try:
                 print(response)
-                print(response.text)
                 print(response.json())
                 json_res = response.text
                 json_res = json.loads(json_res)
