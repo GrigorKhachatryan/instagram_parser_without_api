@@ -32,7 +32,7 @@ class Information():
         self.model_lstm = Model().lstm()
         self.model_lstm.load_weights(os.getcwd() + '/web/best_model_lstm.h5')
 
-        with open('../analysis/sentiment_analysis/tokenizer.pickle', 'rb') as handle:
+        with open(os.getcwd() + '/analysis/sentiment_analysis/tokenizer.pickle', 'rb') as handle:
             self.tokenizer = pickle.load(handle)
         self.emoji_pattern = re.compile("["
                                         u"\U0001F600-\U0001F64F"  # emoticons
@@ -125,9 +125,9 @@ class Information():
 
         country_points = self.posts_info()
 
-        country_list = pd.read_csv('../analysis/clastering/roo.scv')
+        country_list = pd.read_csv(os.getcwd() + '/analysis/clastering/roo.scv')
         centroid = pd.read_csv(
-            '../analysis/clastering/centroid.csv',
+            os.getcwd() + '/analysis/clastering/centroid.csv',
             header=None)
 
 
@@ -144,13 +144,13 @@ class Information():
         index = self.clastering()
         print(index)
         pprint(self.love_list)
-        users_clusters = pd.read_csv('../analysis/clastering/app.csv', header=None, index_col=0)
+        users_clusters = pd.read_csv(os.getcwd() + '/analysis/clastering/app.csv', header=None, index_col=0)
         one_cluster = []
         for key,value in users_clusters.iterrows():
             if np.all(value == index):
                 one_cluster.append(int(key))
         result = {}
-        country_list = pd.read_csv('../analysis/clastering/roo.scv', index_col=0)
+        country_list = pd.read_csv(os.getcwd() + '/analysis/clastering/roo.scv', index_col=0)
         for key,value in country_list.iterrows():
             if key in one_cluster :
                 value_dict = json.loads(value.to_json())
