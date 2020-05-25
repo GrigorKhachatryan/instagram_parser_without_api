@@ -27,7 +27,7 @@ class Information():
         self.url = f'https://www.instagram.com/{nickname}/?__a=1'
         self.love_list = {'result':{}}
         self.model_lstm = Model().lstm()
-        self.model_lstm.load_weights('../analysis/sentiment_analysis/best_model_lstm.h5')
+        self.model_lstm.load_weights('best_model_lstm.h5')
 
         with open('../analysis/sentiment_analysis/tokenizer.pickle', 'rb') as handle:
             self.tokenizer = pickle.load(handle)
