@@ -103,6 +103,8 @@ class Information():
                 self.love_list['result'][json.loads(location['address_json'])["country_code"]]['count'] += 1
             except IndexError as err:
                 print(err)
+            except:
+                continue
         return self.love_list
 
     def post_point(self, text):
