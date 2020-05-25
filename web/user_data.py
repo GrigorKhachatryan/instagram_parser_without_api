@@ -1,3 +1,4 @@
+import os
 import sys
 sys.path.append('..')
 import re
@@ -21,13 +22,14 @@ from scipy.spatial.distance import euclidean
 #
 #
 #
+print(os.getcwd())
 class Information():
 
     def __init__(self, nickname='khachatryan_jr'):
         self.url = f'https://www.instagram.com/{nickname}/?__a=1'
         self.love_list = {'result':{}}
         self.model_lstm = Model().lstm()
-        self.model_lstm.load_weights('../best_model_lstm.h5')
+        self.model_lstm.load_weights('/web/best_model_lstm.h5')
 
         with open('../analysis/sentiment_analysis/tokenizer.pickle', 'rb') as handle:
             self.tokenizer = pickle.load(handle)
