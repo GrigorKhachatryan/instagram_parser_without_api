@@ -24,7 +24,7 @@ def info():
     cursor.execute('select * from resorts where login=%s', (login,))
     user = cursor.fetchone()
     if user == None:
-        cursor.execute('insert into resorts(login) values(%s), (login,)')
+        cursor.execute('insert into resorts(login) values(%s)', (login,))
         connection.commit()
     redis_conn = redis.from_url(os.environ.get("REDIS_URL"))
     queue = Queue(connection=redis_conn)
