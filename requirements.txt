@@ -85,7 +85,7 @@ termstyle==0.1.11
 toml==0.10.0
 tox==3.15.0
 tqdm==4.45.0
-urllib3==1.25.7
+urllib3==1.26.5
 virtualenv==20.0.20
 Werkzeug==1.0.1
 wrapt==1.12.1
